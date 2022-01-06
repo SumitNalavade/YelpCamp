@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded());
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
 
 app.listen(PORT, () => {
     console.log(`Express app listening on port ${PORT}`);
@@ -64,6 +64,7 @@ app.get("/campgrounds/:id", async (req, res) => {
     return res.render("campgrounds/show", { campground: foundCampground });
 });
 
+//Edit Campground
 app.get("/campgrounds/:id/edit", async (req, res) => {    
     const { id } = req.params;
 
@@ -73,9 +74,13 @@ app.get("/campgrounds/:id/edit", async (req, res) => {
 });
 app.patch("/campgrounds/:id", async (req, res) => {
     const { id } = req.params;
+    const { title, location } = req.body.campground;
 
-    console.log("gjghgjg");
+    await Campground.findByIdAndUpdate(id, { title, location }).catch((error) => {
+        console.log(error);
+        return res.send("Error");
+    });
 
-    res.end();
-})
+    return res.redirect(`/campgrounds/${id}`);
+});
 

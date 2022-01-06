@@ -10,18 +10,19 @@
     <h1>Edit Campground</h1>
 
     <main>
-        <form action="/campgrounds/<%= campground.id %>" method="POST"></form>
+        <form action="/campgrounds/<%= campground.id %>?_method=PATCH" method="POST">
         <div>
             <label for="titleInput">Title: </label>
-            <input type="text" name="title" id="titleInput" value="<%= campground.title %> ">
+            <input type="text" name="campground[title]" id="titleInput" value="<%= campground.title %> ">
         </div>
 
         <div>
             <label for="locationInput">Location: </label>
-            <input type="text" name="location" id="locationInput" value="<%= campground.location %> ">
+            <input type="text" name="campground[location]" id="locationInput" value="<%= campground.location %> ">
         </div>
 
         <button>Update Campground</button>
+    </form>
         
         <div>
             <a href="/campgrounds/<%= campground.id %>">Back to Campground</a>
