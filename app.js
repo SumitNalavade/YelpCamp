@@ -72,15 +72,26 @@ app.get("/campgrounds/:id/edit", async (req, res) => {
 
     return res.render("campgrounds/edit", { campground: foundCampground });
 });
-app.patch("/campgrounds/:id", async (req, res) => {
+app.put("/campgrounds/:id", async (req, res) => {
     const { id } = req.params;
-    const { title, location } = req.body.campground;
 
-    await Campground.findByIdAndUpdate(id, { title, location }).catch((error) => {
+    await Campground.findByIdAndUpdate(id, { ...req.body.campground }).catch((error) => {
         console.log(error);
         return res.send("Error");
     });
 
     return res.redirect(`/campgrounds/${id}`);
+});
+
+//Delete Campground
+app.delete("/campgrounds/:id", async (req, res) => {
+    const { id } = req.params;
+
+    await Campground.findByIdAndDelete(id).catch((error) => {
+        console.log("Error");
+        return res.send("Error");  
+    });
+
+    return res.redirect("/campgrounds");
 });
 
