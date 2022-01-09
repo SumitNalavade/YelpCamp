@@ -47,7 +47,7 @@ module.exports.places = this.places;
 
 module.exports.getRandomTitle = function() {
     const descriptor = descriptors[Math.floor(Math.random() * descriptors.length)];
-    const place = descriptors[Math.floor(Math.random() * places.length)];
+    const place = places[Math.floor(Math.random() * (places.length - 1))];
 
     return `${descriptor} ${place}`;
 }

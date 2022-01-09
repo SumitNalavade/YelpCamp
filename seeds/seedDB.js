@@ -19,6 +19,7 @@ async function seedDB(count) {
         const randomPicker = Math.floor(Math.random() * 1000);
         const pickedCity = cities[randomPicker]; //Imported from the cities.js file
         const { city, state } = pickedCity;
+        
         const pickedName = getRandomTitle(); //Imported from the seedHelpers.js file
 
         const campground = new Campground({
