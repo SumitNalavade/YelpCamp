@@ -3,9 +3,24 @@
     <h1>All Campgrounds</h1>
     <main>
         <a href="/campgrounds/new">Add New Campground</a>
-        <ul>
-            <% for(let campground of campgrounds) { %>
-                <li><a href="/campgrounds/<%= campground.id %> "><%= campground.title %></a></li> 
-                <% } %> 
-        </ul>
+        
+        <% for(let campground of campgrounds) { %>
+               <div class="card" mb-3>
+                   <div class="row">
+                    <div class="col-md-4">
+                        <img class="img-fluid" src="<%= campground.image %> " alt="">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= campground.title %> </h5>
+                            <p class="card-text"><%= campground.description %> </p>
+                            <p class="card-text">
+                                <small class="text-muted"><%= campground.location %> </small>
+                            </p>
+                            <a href="/campgrounds/<%= campground.id %>" class="btn btn-primary">View <%= campground.title %> </a>
+                        </div>
+                    </div>
+                   </div>
+               </div>
+            <% } %> 
     </main>

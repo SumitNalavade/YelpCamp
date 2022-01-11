@@ -43,9 +43,9 @@ app.get("/campgrounds/new", (req, res) => {
     return res.render("campgrounds/new");
 });
 app.post("/campgrounds", async (req, res) => {
-    const { title, location } = req.body.campground;
+    const { title, location, description, price, image } = req.body.campground;
 
-    const newCampground = new Campground({ title, location });
+    const newCampground = new Campground({ title, location, description, price, image });
     await newCampground.save().catch((error) => {
         console.log(error);
         return res.send("Error");
