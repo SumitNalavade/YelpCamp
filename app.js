@@ -3,6 +3,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
+const catchAsync = require("./utils/catchAsync"); //Wrapper function to handle async error
+const ExpressError = require("./utils/ExpressError");
 const Campground = require("./models/campground");
 
 mongoose.connect("mongodb://localhost:27017/yelp-camp", { useNewUrlParser: true, useUnifiedTopology: true });
@@ -29,71 +31,68 @@ app.listen(PORT, () => {
 app.get("/", (req, res) => {
     res.redirect("/campgrounds");
 });
-app.get("/campgrounds", async (req, res) => {
-    const campgrounds = await Campground.find({}).catch((error) => {
-        console.log(error);
-        return res.send("Error");
-    });
+app.get("/campgrounds", catchAsync(async (req, res, next) => {
+    const campgrounds = await Campground.find({})
 
     return res.render("campgrounds/index", { campgrounds });
-});
+}));
 
 //Create new campground
 app.get("/campgrounds/new", (req, res) => {
     return res.render("campgrounds/new");
 });
-app.post("/campgrounds", async (req, res) => {
+app.post("/campgrounds", catchAsync(async (req, res, next) => {
     const { title, location, description, price, image } = req.body.campground;
 
     const newCampground = new Campground({ title, location, description, price, image });
-    await newCampground.save().catch((error) => {
-        console.log(error);
-        return res.send("Error");
-    });
-
+    await newCampground.save();
+    
     return res.redirect(`campgrounds/${newCampground.id}`);
-});
+}));
 
 //Display details of specific campgrounds given ID
-app.get("/campgrounds/:id", async (req, res) => {
+app.get("/campgrounds/:id", catchAsync(async (req, res) => {
     const { id } = req.params;
 
-    const foundCampground = await Campground.findById(id).catch((error) => {
-        console.log(error);
-        return res.send("Error");
-    });
+    const foundCampground = await Campground.findById(id)
 
     return res.render("campgrounds/show", { campground: foundCampground });
-});
+}));
 
 //Edit Campground
-app.get("/campgrounds/:id/edit", async (req, res) => {    
+app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {    
     const { id } = req.params;
 
     const foundCampground = await Campground.findById(id);
 
     return res.render("campgrounds/edit", { campground: foundCampground });
-});
-app.put("/campgrounds/:id", async (req, res) => {
+}));
+app.put("/campgrounds/:id", catchAsync(async (req, res) => {
     const { id } = req.params;
 
-    await Campground.findByIdAndUpdate(id, { ...req.body.campground }).catch((error) => {
-        console.log(error);
-        return res.send("Error");
-    });
+    await Campground.findByIdAndUpdate(id, { ...req.body.campground });
 
     return res.redirect(`/campgrounds/${id}`);
-});
+}));
 
 //Delete Campground
-app.delete("/campgrounds/:id", async (req, res) => {
+app.delete("/campgrounds/:id", catchAsync(async (req, res) => {
     const { id } = req.params;
 
-    await Campground.findByIdAndDelete(id).catch((error) => {
-        console.log("Error");
-        return res.send("Error");  
-    });
+    await Campground.findByIdAndDelete(id);
 
     return res.redirect("/campgrounds");
-});
+}));
+
+//Throw a 404 for unmatched routes
+app.all("*", (req, res, next) => {
+    return next(new ExpressError("No Such Route", 404));
+})
+
+//Generic error handler
+app.use((err, req, res, next) => {
+    const { message = "Something Went Wrong", status = 500 } = err;
+
+    res.status(status).send(message);
+})
 
