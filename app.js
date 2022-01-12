@@ -45,14 +45,17 @@ app.get("/campgrounds/new", (req, res) => {
 app.post("/campgrounds", catchAsync(async (req, res, next) => {
     const CampgroundSchema = Joi.object({
         title: Joi.string().required(),
-        price: Joi.number().required().min(0)
+        price: Joi.number().required().min(0),
+        image: Joi.string().required(),
+        location: Joi.string().required(),
+        description: Joi.string().required()
     });
 
-    const { error } = CampgroundSchema.validate(req.body.campground);
-    if(error) {
-        const message = error.details.map(el => el.message).join(",")
-        throw new ExpressError(message, 400);
-    }
+   const { error } = CampgroundSchema.validate(req.body.campground);
+   if(error) {
+       const message = error.details.map(el => el.message).join(",");
+       throw new ExpressError(message, 400);
+   }
 
     const newCampground = new Campground(req.body.campground);
     await newCampground.save();
@@ -93,10 +96,6 @@ app.delete("/campgrounds/:id", catchAsync(async (req, res) => {
 
     return res.redirect("/campgrounds");
 }));
-
-app.get("/error", (req, res) => {
-    return res.render("error");
-})
 
 //Throw a 404 for unmatched routes
 app.all("*", (req, res, next) => {
