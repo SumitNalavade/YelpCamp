@@ -3,6 +3,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
+const Joi = require("joi");
 const catchAsync = require("./utils/catchAsync"); //Wrapper function to handle async error
 const ExpressError = require("./utils/ExpressError");
 const Campground = require("./models/campground");
@@ -42,9 +43,18 @@ app.get("/campgrounds/new", (req, res) => {
     return res.render("campgrounds/new");
 });
 app.post("/campgrounds", catchAsync(async (req, res, next) => {
-    const { title, location, description, price, image } = req.body.campground;
+    const CampgroundSchema = Joi.object({
+        title: Joi.string().required(),
+        price: Joi.number().required().min(0)
+    });
 
-    const newCampground = new Campground({ title, location, description, price, image });
+    const { error } = CampgroundSchema.validate(req.body.campground);
+    if(error) {
+        const message = error.details.map(el => el.message).join(",")
+        throw new ExpressError(message, 400);
+    }
+
+    const newCampground = new Campground(req.body.campground);
     await newCampground.save();
     
     return res.redirect(`campgrounds/${newCampground.id}`);
@@ -84,15 +94,21 @@ app.delete("/campgrounds/:id", catchAsync(async (req, res) => {
     return res.redirect("/campgrounds");
 }));
 
+app.get("/error", (req, res) => {
+    return res.render("error");
+})
+
 //Throw a 404 for unmatched routes
 app.all("*", (req, res, next) => {
-    return next(new ExpressError("No Such Route", 404));
-})
+    return next(new ExpressError("Page Not Found", 404));
+});
 
 //Generic error handler
 app.use((err, req, res, next) => {
-    const { message = "Something Went Wrong", status = 500 } = err;
+    const { status = 500 } = err;
 
-    res.status(status).send(message);
-})
+    err.message ? "" : err.message = "Something went wrong!"
+
+    res.status(status).render("error", { err });
+});
 
