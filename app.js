@@ -3,10 +3,10 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
-const Joi = require("joi");
 const catchAsync = require("./utils/catchAsync"); //Wrapper function to handle async error
 const ExpressError = require("./utils/ExpressError");
 const Campground = require("./models/campground");
+const { CampgroundSchema } = require("./utils/joiValidationSchemas");
 
 mongoose.connect("mongodb://localhost:27017/yelp-camp", { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -23,6 +23,16 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded());
 app.use(methodOverride('_method'));
+
+//Validate a new campground or changes to an existing campground
+function validateCampground(req, res, next) {
+    //Import the Campground Validation Schema from the utils directory
+   const { error } = CampgroundSchema.validate(req.body.campground);
+   if(error) {
+       const message = error.details.map(el => el.message).join(",");
+       throw new ExpressError(message, 400);
+   } else { next() }
+}
 
 app.listen(PORT, () => {
     console.log(`Express app listening on port ${PORT}`);
@@ -42,21 +52,7 @@ app.get("/campgrounds", catchAsync(async (req, res, next) => {
 app.get("/campgrounds/new", (req, res) => {
     return res.render("campgrounds/new");
 });
-app.post("/campgrounds", catchAsync(async (req, res, next) => {
-    const CampgroundSchema = Joi.object({
-        title: Joi.string().required(),
-        price: Joi.number().required().min(0),
-        image: Joi.string().required(),
-        location: Joi.string().required(),
-        description: Joi.string().required()
-    });
-
-   const { error } = CampgroundSchema.validate(req.body.campground);
-   if(error) {
-       const message = error.details.map(el => el.message).join(",");
-       throw new ExpressError(message, 400);
-   }
-
+app.post("/campgrounds", validateCampground, catchAsync(async (req, res, next) => {
     const newCampground = new Campground(req.body.campground);
     await newCampground.save();
     
@@ -80,10 +76,10 @@ app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {
 
     return res.render("campgrounds/edit", { campground: foundCampground });
 }));
-app.put("/campgrounds/:id", catchAsync(async (req, res) => {
+app.put("/campgrounds/:id", validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
 
-    await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true });
 
     return res.redirect(`/campgrounds/${id}`);
 }));
