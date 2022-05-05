@@ -8,4 +8,11 @@ const CampgroundSchema = Joi.object({
     location: Joi.string().required(),
     description: Joi.string().required()
 });
+
+const ReviewSchema = Joi.object({
+    rating: Joi.number().required().min(1).max(5),
+    body: Joi.string().required()
+});
+
 exports.CampgroundSchema = CampgroundSchema
+exports.ReviewSchema = ReviewSchema;
