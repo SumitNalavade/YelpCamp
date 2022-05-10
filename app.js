@@ -3,6 +3,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
+const session = require("express-session");
+const flash = require("connect-flash");
 const ExpressError = require("./utils/ExpressError");
 
 const campgroundRouter = require("./routes/campgrounds");
@@ -21,8 +23,28 @@ const PORT = process.env.PORT || 3000;
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
+
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded());
 app.use(methodOverride('_method'));
+const sessionConfig = {
+    secret: "thisshouldbeabettersecret!",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge:  1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    return next();
+});
 
 app.use("/campgrounds", campgroundRouter);
 app.use("/campgrounds/:campgroundID/reviews", reviewRouter);
@@ -31,7 +53,6 @@ app.listen(PORT, () => {
     console.log(`Express app listening on port ${PORT}`);
 });
 
-//Display all campgrounds
 app.get("/", (req, res) => {
     res.redirect("/campgrounds");
 });
