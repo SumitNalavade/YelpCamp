@@ -33,12 +33,11 @@ async function seedDB(count) {
             location: `${city}, ${state}`,
             image,
             description,
-            price
+            price,
+            author: "62a5754898565de7ada139b5"
         });
 
-        await campground.save().catch((error) => {
-            console.log(error);
-        });
+        await campground.save();
     };
 
     return mongoose.connection.close();
