@@ -22,7 +22,16 @@ async function seedDB(count) {
         
         const pickedName = getRandomTitle(); //Imported from the seedHelpers.js file
 
-        const image = "https://source.unsplash.com/collection/483251"; //Get a random image from Unsplash
+        const images= [
+            {
+                url: 'https://res.cloudinary.com/dtzsq6zws/image/upload/v1655327440/YelpCamp/hsaooyrq5wkregclujoi.jpg',
+                filename: 'YelpCamp/hsaooyrq5wkregclujoi'
+            },
+            {
+                url: 'https://res.cloudinary.com/dtzsq6zws/image/upload/v1655327440/YelpCamp/lcl84zjylltvdspphrot.jpg',
+                filename: 'YelpCamp/lcl84zjylltvdspphrot'
+            }
+          ];
 
         const description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
@@ -31,7 +40,7 @@ async function seedDB(count) {
         const campground = new Campground({
             title: pickedName,
             location: `${city}, ${state}`,
-            image,
+            images,
             description,
             price,
             author: "62a5754898565de7ada139b5"
