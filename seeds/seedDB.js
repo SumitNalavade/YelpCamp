@@ -24,12 +24,12 @@ async function seedDB(count) {
 
         const images= [
             {
-                url: 'https://res.cloudinary.com/dtzsq6zws/image/upload/v1655327440/YelpCamp/hsaooyrq5wkregclujoi.jpg',
-                filename: 'YelpCamp/hsaooyrq5wkregclujoi'
+                url: 'https://res.cloudinary.com/dtzsq6zws/image/upload/v1655446913/canada-british-columbia-parksville-best-campgrounds-intro-paragraph-camping-rathtrevor-beach_ffm4ob.jpg',
+                filename: ''
             },
             {
-                url: 'https://res.cloudinary.com/dtzsq6zws/image/upload/v1655327440/YelpCamp/lcl84zjylltvdspphrot.jpg',
-                filename: 'YelpCamp/lcl84zjylltvdspphrot'
+                url: 'https://res.cloudinary.com/dtzsq6zws/image/upload/v1655446913/canada-british-columbia-parksville-best-campgrounds-intro-paragraph-camping-rathtrevor-beach_ffm4ob.jpg',
+                filename: ''
             }
           ];
 
@@ -43,6 +43,10 @@ async function seedDB(count) {
             images,
             description,
             price,
+            geometry: {
+                type: "Point",
+                coordinates: [-119.571615, 37.737363]
+            },
             author: "62a5754898565de7ada139b5"
         });
 
