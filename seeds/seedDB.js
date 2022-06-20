@@ -45,7 +45,10 @@ async function seedDB(count) {
             price,
             geometry: {
                 type: "Point",
-                coordinates: [-119.571615, 37.737363]
+                coordinates: [
+                    pickedCity.longitude,
+                    pickedCity.latitude
+                ]
             },
             author: "62a5754898565de7ada139b5"
         });
@@ -56,4 +59,4 @@ async function seedDB(count) {
     return mongoose.connection.close();
 }
 
-seedDB(50);
+seedDB(200);

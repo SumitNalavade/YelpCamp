@@ -3,7 +3,7 @@ const parsedCampground = JSON.parse(campground);
 mapboxgl.accessToken = mapToken;
     const map = new mapboxgl.Map({
         container: 'map', // container ID
-        style: 'mapbox://styles/mapbox/streets-v11', // style URL
+        style: 'mapbox://styles/mapbox/light-v10', // style URL
         center: parsedCampground.geometry.coordinates, // starting position [lng, lat]
         zoom: 10 // starting zoom
 });
