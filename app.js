@@ -68,7 +68,7 @@ app.listen(PORT, () => {
 });
 
 app.get("/", (req, res) => {
-    res.redirect("/campgrounds");
+    res.render("home");
 });
 
 //Throw a 404 for unmatched routes

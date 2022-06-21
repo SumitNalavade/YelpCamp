@@ -3,9 +3,6 @@
 
 <div class="row">
     <div class="col-6">
-      
-    <div id='map' style='width: 400px; height: 300px;'></div>
-    
       <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <% campground.images.forEach((img, i) => { %> 
@@ -47,6 +44,8 @@
     </div>
 
     <div class="col-6">
+      <div id='map'></div>
+
       <% if(currentUser) { %> 
       <h2>Leave a review</h2>
       <form action="/campgrounds/<%= campground.id %>/reviews" method="post" class="mb-3 validatedForm" novalidate>
@@ -95,6 +94,8 @@
 
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN%>"
-      const campground = '<%-JSON.stringify(campground)%>'
+      const campgroundGeometry = '<%-JSON.stringify(campground["geometry"])%>'
+      const campgroundTitle = '<%-JSON.stringify(campground["title"])%>'
+      const campgroundLocation = '<%-JSON.stringify(campground["location"])%>'
 </script>
 <script src="/js/showPageMap.js"></script>
