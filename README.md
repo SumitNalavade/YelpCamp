@@ -8,11 +8,11 @@ Yelp-like full-stack web application from the 2022 Web Developer Bootcamp
 
 ## 📷 Screenshots
 
-![Screen Shot 2022-06-22 at 2 39 23 AM](https://user-images.githubusercontent.com/48499839/174972530-0c992a40-138b-473d-ae9a-bd7f2a02872a.png)
+![](https://user-images.githubusercontent.com/48499839/174972530-0c992a40-138b-473d-ae9a-bd7f2a02872a.png)
 
-![Screen Shot 2022-06-22 at 2 40 16 AM](https://user-images.githubusercontent.com/48499839/174972755-329e303c-87a8-43cd-85c8-7a2da3abb32c.png)
+![](https://user-images.githubusercontent.com/48499839/174972755-329e303c-87a8-43cd-85c8-7a2da3abb32c.png)
 
-![Screen Shot 2022-06-22 at 2 40 53 AM](https://user-images.githubusercontent.com/48499839/174972894-ca88c718-6a59-44f7-901b-f24f30621d83.png)
+![](https://user-images.githubusercontent.com/48499839/174972894-ca88c718-6a59-44f7-901b-f24f30621d83.png)
 
 
 
