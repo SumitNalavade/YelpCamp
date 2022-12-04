@@ -4,7 +4,7 @@
 Yelp-like full-stack web application from the 2022 Web Developer Bootcamp
 
 
-🚨Live App: https://shielded-gorge-47939.herokuapp.com/
+🚨Live App: https://yelpcamp-dwzt.onrender.com/
 
 ## 📷 Screenshots
 
@@ -28,7 +28,7 @@ Yelp-like full-stack web application from the 2022 Web Developer Bootcamp
 - [Mapbox](https://github.com/mapbox/mapbox-gl-js) to deliver an interactive map for users to visually see the location of campgrounds through a cluster map and a zoomed in map for each campground.
 - [EJS (Embedded JavaScript Templates)](https://github.com/mde/ejs) as a templating language to create dynamic user experices.
 - [Bootstrap](https://github.com/twbs/bootstrap) as the driving CSS framework to create visually appealing user experiences.
-- Heroku to host the complete application
+- Render to host the complete application
 ## 🚀 Getting Started
 ### To run this project on your system:
 Create an .env file and add values to the following variables:
